@@ -1,9 +1,6 @@
 ﻿using System;
 using Calendar.DataAccess;
 using Calendar.Events;
-using Calendar.Events.AddPolicy;
-using Calendar.Logging;
-using Calendar.UI;
 
 namespace Calendar
 {
@@ -11,38 +8,32 @@ namespace Calendar
   {
     static void Main()
     {
-      using (Logger logger = new Logger())
+      EventsRepository eventsRepository = new EventsRepository();
+      while (true)
       {
-        IEventsRepository eventsRepository = new EventsRepository("calendarData.dat");
-        IAddPolicy shareableSchedulePolicy = new ShareableSchedulePolicy(eventsRepository);
-        IAddPolicy exclusiveSchedulePolicy = new ExclusiveSchedulePolicy(eventsRepository);
-
-        Planner planner = new Planner(eventsRepository, shareableSchedulePolicy, exclusiveSchedulePolicy);
-
-        IMeetingFactory meetingFactory = new MeetingFactory();
-        IOption addMeetingOption = new AddMeetingOption(meetingFactory, planner, logger);
-
-        ITodoFactory todoFactory = new TodoFactory();
-        IOption addTodoOption = new AddTodoOption(todoFactory, planner, logger);
-
-        IOption listEventsOption = new ListEventsOption(planner);
-
-        IOption endApplicationOption = new EndApplicationOption();
-
-        OptionsDispatcher optionsDispatcher = new OptionsDispatcher(new[]
-          {
-            addTodoOption,
-            addMeetingOption,
-            listEventsOption,
-            endApplicationOption,
-          }, 
-          Console.In, 
-          logger);
-
-        bool result = true;
-        while (result)
+        Console.WriteLine("Pick option:");
+        string[] options = new[] { "a - todo", "l - list events" };
+        foreach (var option in options)
         {
-          result = optionsDispatcher.ChooseOptionAndRun();
+          Console.WriteLine(option);
+        }
+
+        string chosenOption = Console.ReadLine();
+        if (chosenOption == "a")
+        {
+          DateSpan schedule = DateSpanReader.PromptForDateSpan();
+          Console.Write("Title: ");
+          string title = Console.ReadLine();
+          CalendarEvent calendarEvent = new CalendarEvent(schedule, title);
+          eventsRepository.AddEvent(calendarEvent);
+        }
+        else if (chosenOption == "l")
+        {
+          CalendarEvent[] calendarEvents = eventsRepository.GetEvents(DateSpan.Max);
+          foreach (var calendarEvent in calendarEvents)
+          {
+            Console.WriteLine(calendarEvent);
+          }
         }
       }
     }

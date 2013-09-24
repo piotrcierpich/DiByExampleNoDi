@@ -48,32 +48,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DataAccess\EventsRepository.cs" />
-    <Compile Include="Events\AddPolicy\ExclusiveSchedulePolicy.cs" />
-    <Compile Include="Events\AddPolicy\IAddPolicy.cs" />
-    <Compile Include="Events\ICalendarEvent.cs" />
-    <Compile Include="Events\CalendarEventBase.cs" />
-    <Compile Include="Events\IEventsRepository.cs" />
-    <Compile Include="Events\Meeting.cs" />
-    <Compile Include="Events\AddPolicy\ShareableSchedulePolicy.cs" />
-    <Compile Include="IPlanner.cs" />
-    <Compile Include="Logging\ILogger.cs" />
-    <Compile Include="Logging\Logger.cs" />
-    <Compile Include="Planner.cs" />
+    <Compile Include="Events\CalendarEvent.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Events\DateSpan.cs" />
-    <Compile Include="Events\Todo.cs" />
-    <Compile Include="UI\AddMeetingOption.cs" />
-    <Compile Include="UI\AddTodoOption.cs" />
-    <Compile Include="UI\DateSpanReader.cs" />
-    <Compile Include="UI\EndApplicationOption.cs" />
-    <Compile Include="UI\IMeetingFactory.cs" />
-    <Compile Include="UI\IOption.cs" />
-    <Compile Include="UI\ITodoFactory.cs" />
-    <Compile Include="UI\ListEventsOption.cs" />
-    <Compile Include="UI\MeetingFactory.cs" />
-    <Compile Include="UI\OptionsDispatcher.cs" />
-    <Compile Include="UI\TodoFactory.cs" />
+    <Compile Include="DateSpanReader.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

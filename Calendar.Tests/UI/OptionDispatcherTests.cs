@@ -1,7 +1,5 @@
 ﻿using System.IO;
 using Calendar.Logging;
-using Calendar.UI;
-
 using NSubstitute;
 
 using NUnit.Framework;

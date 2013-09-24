@@ -2,8 +2,6 @@
 
 using Calendar.Events;
 using Calendar.Logging;
-using Calendar.UI;
-
 using NSubstitute;
 
 using NUnit.Framework;

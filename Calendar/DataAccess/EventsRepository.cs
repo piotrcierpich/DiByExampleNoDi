@@ -8,47 +8,42 @@ using Calendar.Events;
 
 namespace Calendar.DataAccess
 {
-    class EventsRepository : IEventsRepository
+  class EventsRepository
+  {
+    private readonly BinaryFormatter _binaryFormatter = new BinaryFormatter();
+    private const string FileName = "calendarData.dat";
+
+    public CalendarEvent[] GetEvents(DateSpan schedule)
     {
-        private readonly BinaryFormatter binaryFormatter = new BinaryFormatter();
-        private readonly string fileName;
-
-        public EventsRepository(string fileName)
-        {
-            this.fileName = fileName;
-        }
-
-        public ICalendarEvent[] GetEvents(DateSpan schedule)
-        {
-            try
-            {
-                IEnumerable<ICalendarEvent> allEvents = TryReadingCalendarEvents();
-                return allEvents.Where(e => e.Schedule.IntersectWith(schedule))
-                                .ToArray();
-            }
-            catch (Exception)
-            {
-                return new ICalendarEvent[0];
-            }
-        }
-
-        private IEnumerable<ICalendarEvent> TryReadingCalendarEvents()
-        {
-            using (Stream s = File.OpenRead(fileName))
-            {
-                return (ICalendarEvent[])binaryFormatter.Deserialize(s);
-            }
-        }
-
-        public void AddEvent(ICalendarEvent eventToAdd)
-        {
-            IList<ICalendarEvent> allEvents = GetEvents(DateSpan.Max).ToList();
-            allEvents.Add(eventToAdd);
-
-            using (Stream s = File.OpenWrite(fileName))
-            {
-                binaryFormatter.Serialize(s, allEvents.ToArray());
-            }
-        }
+      try
+      {
+        IEnumerable<CalendarEvent> allEvents = TryReadingCalendarEvents();
+        return allEvents.Where(e => e.Schedule.IntersectWith(schedule))
+                        .ToArray();
+      }
+      catch (Exception)
+      {
+        return new CalendarEvent[0];
+      }
     }
+
+    private IEnumerable<CalendarEvent> TryReadingCalendarEvents()
+    {
+      using (Stream s = File.OpenRead(FileName))
+      {
+        return (CalendarEvent[])_binaryFormatter.Deserialize(s);
+      }
+    }
+
+    public void AddEvent(CalendarEvent eventToAdd)
+    {
+      IList<CalendarEvent> allEvents = GetEvents(DateSpan.Max).ToList();
+      allEvents.Add(eventToAdd);
+
+      using (Stream s = File.OpenWrite(FileName))
+      {
+        _binaryFormatter.Serialize(s, allEvents.ToArray());
+      }
+    }
+  }
 }

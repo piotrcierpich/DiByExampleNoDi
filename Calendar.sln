@@ -3,8 +3,6 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2012
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Calendar", "Calendar\Calendar.csproj", "{842B57E2-21FA-4405-BFE2-97BC6A3BBFDF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Calendar.Tests", "Calendar.Tests\Calendar.Tests.csproj", "{CE289604-0348-4328-B4FD-191D065C56A5}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{9CFD00C9-C646-4C40-AAFA-FF42137284CC}"
 	ProjectSection(SolutionItems) = preProject
 		.nuget\NuGet.Config = .nuget\NuGet.Config
@@ -22,10 +20,6 @@ Global
 		{842B57E2-21FA-4405-BFE2-97BC6A3BBFDF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{842B57E2-21FA-4405-BFE2-97BC6A3BBFDF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{842B57E2-21FA-4405-BFE2-97BC6A3BBFDF}.Release|Any CPU.Build.0 = Release|Any CPU
-		{CE289604-0348-4328-B4FD-191D065C56A5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{CE289604-0348-4328-B4FD-191D065C56A5}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{CE289604-0348-4328-B4FD-191D065C56A5}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{CE289604-0348-4328-B4FD-191D065C56A5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
