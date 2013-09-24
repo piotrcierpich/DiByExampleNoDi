@@ -48,7 +48,22 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DataAccess\EventsRepository.cs" />
-    <Compile Include="Events\CalendarEvent.cs" />
+    <Compile Include="Events\AddPolicy\ExclusiveSchedulePolicy.cs" />
+    <Compile Include="Events\AddPolicy\IAddPolicy.cs" />
+    <Compile Include="Events\AddPolicy\ShareableTimePolicy.cs" />
+    <Compile Include="Events\IEventsRepository.cs" />
+    <Compile Include="Events\IPlanner.cs" />
+    <Compile Include="Events\Planner.cs" />
+    <Compile Include="Events\Todo.cs" />
+    <Compile Include="Events\CalendarEventBase.cs" />
+    <Compile Include="Events\ICalendarEvent.cs" />
+    <Compile Include="Events\Meeting.cs" />
+    <Compile Include="UI\ListEventsOption.cs" />
+    <Compile Include="UI\AddMeetingOption.cs" />
+    <Compile Include="UI\AddTodoOption.cs" />
+    <Compile Include="UI\EndApplicationOption.cs" />
+    <Compile Include="UI\IOption.cs" />
+    <Compile Include="UI\OptionsDispatcher.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Events\DateSpan.cs" />

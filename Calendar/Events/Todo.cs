@@ -3,15 +3,11 @@
 namespace Calendar.Events
 {
   [Serializable]
-  public class CalendarEvent
+  public class Todo : CalendarEventBase
   {
-    private readonly DateSpan _schedule;
-    private readonly string _title;
-
-    public CalendarEvent(DateSpan schedule, string title)
+    public Todo(DateSpan schedule, string title)
+      : base(schedule, title)
     {
-      _schedule = schedule;
-      _title = title;
     }
 
     public override string ToString()
@@ -20,8 +16,5 @@ namespace Calendar.Events
              + "start date: " + Schedule.StartTime + Environment.NewLine
              + "end date: " + Schedule.EndTime + Environment.NewLine;
     }
-
-    public DateSpan Schedule { get { return _schedule; } }
-    public string Title { get { return _title; } }
   }
 }

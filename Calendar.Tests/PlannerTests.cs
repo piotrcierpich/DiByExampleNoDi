@@ -1,4 +1,10 @@
-﻿using Calendar.Events;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+using Calendar.Events;
 using Calendar.Events.AddPolicy;
 
 using NSubstitute;
@@ -7,30 +13,37 @@ using NUnit.Framework;
 
 namespace Calendar.Tests
 {
-    [TestFixture]
-    public class PlannerTests
+  [TestFixture]
+  class PlannerTests
+  {
+    [Test]
+    public void ShouldUseExclusiveSchedulePolicyWhenEventCannotShareTime()
     {
-        [Test]
-        public void ShouldListAllEventsWhenAskedFor()
-        {
-            //IEventsRepository eventsRepository = Substitute.For<IEventsRepository>();
-            //Planner planner = new Planner(eventsRepository);
-            //DateSpan dateSpan = DateSpan.Max;
-            //planner.GetEvents(dateSpan);
-            //eventsRepository.Received(1).GetEvents(dateSpan);
-        }
+      ICalendarEvent calendarEvent = Substitute.For<ICalendarEvent>();
+      calendarEvent.CanShareTime.Returns(false);
 
-        [Test]
-        public void ShouldAddToRepositoryWhenAskedFor()
-        {
-            //IEventsRepository eventsRepository = Substitute.For<IEventsRepository>();
-            //Planner planner = new Planner(eventsRepository);
-            //ICalendarEvent eventToAdd = Substitute.For<ICalendarEvent>();
-            //IAddPolicy addPolicy = Substitute.For<IAddPolicy>();
-            //eventToAdd.AddPolicy.Returns(addPolicy);
+      IAddPolicy exclusiveScheduleAddPolicy = Substitute.For<IAddPolicy>();
+      IAddPolicy shareableTimeAddPolicy = Substitute.For<IAddPolicy>();
 
-            //planner.AddEvent(eventToAdd);
-            //addPolicy.Received(1).TryAddToRepository();
-        }
+      Planner planner = new Planner(exclusiveScheduleAddPolicy, shareableTimeAddPolicy);
+      planner.AddEvent(calendarEvent);
+
+      exclusiveScheduleAddPolicy.Received(1).TryAddToRepository(calendarEvent);
     }
+
+    [Test]
+    public void ShoulduseShareableSchedulePolicyWhenEventCanShareTime()
+    {
+      ICalendarEvent calendarEvent = Substitute.For<ICalendarEvent>();
+      calendarEvent.CanShareTime.Returns(true);
+
+      IAddPolicy exclusiveScheduleAddPolicy = Substitute.For<IAddPolicy>();
+      IAddPolicy shareableTimeAddPolicy = Substitute.For<IAddPolicy>();
+
+      Planner planner = new Planner(exclusiveScheduleAddPolicy, shareableTimeAddPolicy);
+      planner.AddEvent(calendarEvent);
+
+      shareableTimeAddPolicy.Received(1).TryAddToRepository(calendarEvent);
+    }
+  }
 }

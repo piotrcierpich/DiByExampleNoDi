@@ -8,36 +8,36 @@ using Calendar.Events;
 
 namespace Calendar.DataAccess
 {
-  class EventsRepository
+  class EventsRepository : IEventsRepository
   {
     private readonly BinaryFormatter _binaryFormatter = new BinaryFormatter();
     private const string FileName = "calendarData.dat";
 
-    public CalendarEvent[] GetEvents(DateSpan schedule)
+    public ICalendarEvent[] GetEvents(DateSpan schedule)
     {
       try
       {
-        IEnumerable<CalendarEvent> allEvents = TryReadingCalendarEvents();
+        IEnumerable<ICalendarEvent> allEvents = TryReadingCalendarEvents();
         return allEvents.Where(e => e.Schedule.IntersectWith(schedule))
                         .ToArray();
       }
       catch (Exception)
       {
-        return new CalendarEvent[0];
+        return new ICalendarEvent[0];
       }
     }
 
-    private IEnumerable<CalendarEvent> TryReadingCalendarEvents()
+    private IEnumerable<ICalendarEvent> TryReadingCalendarEvents()
     {
       using (Stream s = File.OpenRead(FileName))
       {
-        return (CalendarEvent[])_binaryFormatter.Deserialize(s);
+        return (ICalendarEvent[])_binaryFormatter.Deserialize(s);
       }
     }
 
-    public void AddEvent(CalendarEvent eventToAdd)
+    public void AddEvent(ICalendarEvent eventToAdd)
     {
-      IList<CalendarEvent> allEvents = GetEvents(DateSpan.Max).ToList();
+      IList<ICalendarEvent> allEvents = GetEvents(DateSpan.Max).ToList();
       allEvents.Add(eventToAdd);
 
       using (Stream s = File.OpenWrite(FileName))
