@@ -1,22 +1,30 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using Calendar.Logging;
 
 namespace Calendar.UI
 {
   internal class OptionsDispatcher
   {
     private readonly IEnumerable<IOption> options;
+    private readonly TextReader textReader;
+    private readonly ILogger _logger;
 
-    public OptionsDispatcher(IEnumerable<IOption> options)
+    public OptionsDispatcher(IEnumerable<IOption> options, TextReader textReader, ILogger logger)
     {
       this.options = options;
+      this.textReader = textReader;
+      _logger = logger;
     }
 
     public bool ChooseOptionAndRun()
     {
+      _logger.Log("ChooseOptionAndRun");
       IOption option = PrintAndChooseOption();
       bool result = option.Run();
+      _logger.Log("ChooseOptionAndRun completed");
       return result;
     }
 
@@ -30,7 +38,7 @@ namespace Calendar.UI
     {
       while (true)
       {
-        string chosenOptionAsString = Console.ReadLine();
+        string chosenOptionAsString = textReader.ReadLine();
         IOption chosenOption = options.FirstOrDefault(o => o.MatchesString(chosenOptionAsString));
         if (chosenOption != default(IOption))
         {

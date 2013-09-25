@@ -58,16 +58,22 @@
     <Compile Include="Events\CalendarEventBase.cs" />
     <Compile Include="Events\ICalendarEvent.cs" />
     <Compile Include="Events\Meeting.cs" />
+    <Compile Include="Logging\ILogger.cs" />
+    <Compile Include="Logging\Logger.cs" />
+    <Compile Include="UI\IMeetingFactory.cs" />
+    <Compile Include="UI\ITodoFactory.cs" />
     <Compile Include="UI\ListEventsOption.cs" />
     <Compile Include="UI\AddMeetingOption.cs" />
     <Compile Include="UI\AddTodoOption.cs" />
     <Compile Include="UI\EndApplicationOption.cs" />
     <Compile Include="UI\IOption.cs" />
+    <Compile Include="UI\MeetingFactory.cs" />
     <Compile Include="UI\OptionsDispatcher.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Events\DateSpan.cs" />
     <Compile Include="DateSpanReader.cs" />
+    <Compile Include="UI\TodoFactory.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

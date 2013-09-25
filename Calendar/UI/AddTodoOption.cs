@@ -1,6 +1,7 @@
 using System;
 
 using Calendar.Events;
+using Calendar.Logging;
 
 namespace Calendar.UI
 {
@@ -9,10 +10,14 @@ namespace Calendar.UI
     internal const string AddToDoOptionString = "a";
 
     private readonly IPlanner planner;
+    private readonly ITodoFactory _todoFactory;
+    private readonly ILogger _logger;
 
-    public AddTodoOption(IPlanner planner)
+    public AddTodoOption(IPlanner planner, ITodoFactory todoFactory, ILogger logger)
     {
       this.planner = planner;
+      _todoFactory = todoFactory;
+      _logger = logger;
     }
 
     public bool MatchesString(string chosenOptionAsString)
@@ -28,11 +33,13 @@ namespace Calendar.UI
 
     public bool Run()
     {
+      _logger.Log("Run");
       DateSpan schedule = DateSpanReader.PromptForDateSpan();
       Console.Write("Title: ");
       string title = Console.ReadLine();
-      Todo calendarEvent = new Todo(schedule, title);
+      Todo calendarEvent = _todoFactory.Create(schedule, title);
       planner.AddEvent(calendarEvent);
+      _logger.Log("Run completed");
       return true;
     }
   }

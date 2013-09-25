@@ -1,6 +1,7 @@
 using System;
 
 using Calendar.Events;
+using Calendar.Logging;
 
 namespace Calendar.UI
 {
@@ -8,10 +9,14 @@ namespace Calendar.UI
   {
     private const string MeetingOptionAsString = "m";
     private readonly IPlanner planner;
+    private readonly IMeetingFactory _meetingFactory;
+    private readonly Logger _logger;
 
-    public AddMeetingOption(IPlanner planner)
+    public AddMeetingOption(IPlanner planner, IMeetingFactory meetingFactory, Logger logger)
     {
       this.planner = planner;
+      _meetingFactory = meetingFactory;
+      _logger = logger;
     }
 
     public bool MatchesString(string chosenOptionAsString)
@@ -21,12 +26,14 @@ namespace Calendar.UI
 
     public bool Run()
     {
+      _logger.Log("Run");
       DateSpan schedule = DateSpanReader.PromptForDateSpan();
       Console.Write("Title: ");
       string title = Console.ReadLine();
       string[] participants = PromptForParticipants();
-      Meeting meetingToAdd = new Meeting(schedule, title, participants);
+      Meeting meetingToAdd = _meetingFactory.Create(schedule, title, participants);
       planner.AddEvent(meetingToAdd);
+      _logger.Log("Run completed");
       return true;
     }
 

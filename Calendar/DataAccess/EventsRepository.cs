@@ -11,7 +11,13 @@ namespace Calendar.DataAccess
   class EventsRepository : IEventsRepository
   {
     private readonly BinaryFormatter _binaryFormatter = new BinaryFormatter();
-    private const string FileName = "calendarData.dat";
+
+    private readonly string fileName;
+
+    public EventsRepository(string outputFile)
+    {
+      fileName = outputFile;
+    }
 
     public ICalendarEvent[] GetEvents(DateSpan schedule)
     {
@@ -29,7 +35,7 @@ namespace Calendar.DataAccess
 
     private IEnumerable<ICalendarEvent> TryReadingCalendarEvents()
     {
-      using (Stream s = File.OpenRead(FileName))
+      using (Stream s = File.OpenRead(fileName))
       {
         return (ICalendarEvent[])_binaryFormatter.Deserialize(s);
       }
@@ -40,7 +46,7 @@ namespace Calendar.DataAccess
       IList<ICalendarEvent> allEvents = GetEvents(DateSpan.Max).ToList();
       allEvents.Add(eventToAdd);
 
-      using (Stream s = File.OpenWrite(FileName))
+      using (Stream s = File.OpenWrite(fileName))
       {
         _binaryFormatter.Serialize(s, allEvents.ToArray());
       }
