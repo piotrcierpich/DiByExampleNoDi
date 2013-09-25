@@ -10,22 +10,17 @@ namespace Calendar.UI
   {
     private readonly IEnumerable<IOption> options;
     private readonly TextReader textReader;
-    private readonly ILogger _logger;
 
-    public OptionsDispatcher(IEnumerable<IOption> options, TextReader textReader, ILogger logger)
+    public OptionsDispatcher(IEnumerable<IOption> options, TextReader textReader)
     {
       this.options = options;
       this.textReader = textReader;
-      _logger = logger;
     }
 
-    public bool ChooseOptionAndRun()
+    public virtual bool ChooseOptionAndRun()
     {
-      _logger.Log("ChooseOptionAndRun");
       IOption option = PrintAndChooseOption();
-      bool result = option.Run();
-      _logger.Log("ChooseOptionAndRun completed");
-      return result;
+      return option.Run();
     }
 
     private IOption PrintAndChooseOption()

@@ -9,10 +9,10 @@ namespace Calendar.UI
   {
     private const string MeetingOptionAsString = "m";
     private readonly IPlanner planner;
-    private readonly IMeetingFactory _meetingFactory;
-    private readonly Logger _logger;
+    private readonly Func<DateSpan, string, string[], Meeting> _meetingFactory;
+    private readonly ILogger _logger;
 
-    public AddMeetingOption(IPlanner planner, IMeetingFactory meetingFactory, Logger logger)
+    public AddMeetingOption(IPlanner planner, Func<DateSpan, string, string[], Meeting> meetingFactory, ILogger logger)
     {
       this.planner = planner;
       _meetingFactory = meetingFactory;
@@ -31,7 +31,7 @@ namespace Calendar.UI
       Console.Write("Title: ");
       string title = Console.ReadLine();
       string[] participants = PromptForParticipants();
-      Meeting meetingToAdd = _meetingFactory.Create(schedule, title, participants);
+      Meeting meetingToAdd = _meetingFactory(schedule, title, participants);
       planner.AddEvent(meetingToAdd);
       _logger.Log("Run completed");
       return true;

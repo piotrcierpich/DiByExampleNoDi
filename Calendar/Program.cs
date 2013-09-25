@@ -1,11 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
-
+using System.IO;
+using Autofac;
+using Autofac.Configuration;
+using Autofac.Extras.DynamicProxy2;
 using Calendar.DataAccess;
 using Calendar.Events;
 using Calendar.Events.AddPolicy;
 using Calendar.Logging;
 using Calendar.UI;
+using System.Reflection;
 
 namespace Calendar
 {
@@ -13,25 +17,35 @@ namespace Calendar
   {
     static void Main()
     {
-      using (Logger logger = new Logger())
-      {
-        EventsRepository eventsRepository = new EventsRepository("calendarData.dat");
-        IAddPolicy shareableTimeAddPolicy = new ShareableTimePolicy(eventsRepository);
-        IAddPolicy exclusiveTimeAddPolicy = new ExclusiveSchedulePolicy(eventsRepository);
-        IPlanner planner = new Planner(exclusiveTimeAddPolicy, shareableTimeAddPolicy);
-        ITodoFactory todoFactory = new TodoFactory(true);
-        IMeetingFactory meetingFactory = new MeetingFactory(false);
 
-        OptionsDispatcher optionsDispatcher = new OptionsDispatcher(
-          new IOption[]
-            {
-              new AddTodoOption(planner, todoFactory, logger),
-              new ListEventsOption(eventsRepository, logger),
-              new AddMeetingOption(planner, meetingFactory, logger),
-              new EndApplicationOption(logger)
-            },
-          Console.In,
-          logger);
+      ContainerBuilder containerBuilder = new ContainerBuilder();
+
+      containerBuilder.RegisterType<ShareableTimePolicy>();
+      containerBuilder.RegisterType<ExclusiveSchedulePolicy>();
+
+      containerBuilder.Register(c => new Planner(c.Resolve<ExclusiveSchedulePolicy>(), c.Resolve<ShareableTimePolicy>()))
+                      .As<IPlanner>();
+
+      containerBuilder.RegisterModule(new ConfigurationSettingsReader("customXmlConfigurationSection"));
+
+      containerBuilder.RegisterType<Logger>()
+                      .AsImplementedInterfaces()
+                      .SingleInstance();
+
+      containerBuilder.RegisterAssemblyTypes(Assembly.GetExecutingAssembly())
+                      .Where(type => type.IsAssignableTo<IOption>())
+                      .AsImplementedInterfaces();
+      
+      containerBuilder.RegisterType<OptionsDispatcher>()
+                      .EnableClassInterceptors()
+                      .InterceptedBy(typeof(LoggingInterceptor));
+      containerBuilder.RegisterType<LoggingInterceptor>();
+
+      containerBuilder.RegisterInstance(Console.In);
+
+      using (IContainer container = containerBuilder.Build())
+      {
+        OptionsDispatcher optionsDispatcher = container.Resolve<OptionsDispatcher>();
 
         bool continueRunning = true;
         while (continueRunning)

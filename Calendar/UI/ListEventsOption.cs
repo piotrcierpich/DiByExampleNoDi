@@ -10,9 +10,9 @@ namespace Calendar.UI
     internal const string ListEventsOptionString = "l";
 
     private readonly IEventsRepository eventsRepository;
-    private readonly Logger _logger;
+    private readonly ILogger _logger;
 
-    public ListEventsOption(IEventsRepository eventsRepository, Logger logger)
+    public ListEventsOption(IEventsRepository eventsRepository, ILogger logger)
     {
       this.eventsRepository = eventsRepository;
       _logger = logger;
@@ -29,7 +29,8 @@ namespace Calendar.UI
       ICalendarEvent[] calendarEvents = eventsRepository.GetEvents(DateSpan.Max);
       foreach (var calendarEvent in calendarEvents)
       {
-        Console.WriteLine(calendarEvent);
+        if (calendarEvent != null)
+          Console.WriteLine(calendarEvent);
       }
       _logger.Log("Run completed");
       return true;

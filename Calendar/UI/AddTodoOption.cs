@@ -10,10 +10,10 @@ namespace Calendar.UI
     internal const string AddToDoOptionString = "a";
 
     private readonly IPlanner planner;
-    private readonly ITodoFactory _todoFactory;
+    private readonly Func<DateSpan, string, Todo> _todoFactory;
     private readonly ILogger _logger;
 
-    public AddTodoOption(IPlanner planner, ITodoFactory todoFactory, ILogger logger)
+    public AddTodoOption(IPlanner planner, Func<DateSpan, string, Todo> todoFactory, ILogger logger)
     {
       this.planner = planner;
       _todoFactory = todoFactory;
@@ -37,7 +37,7 @@ namespace Calendar.UI
       DateSpan schedule = DateSpanReader.PromptForDateSpan();
       Console.Write("Title: ");
       string title = Console.ReadLine();
-      Todo calendarEvent = _todoFactory.Create(schedule, title);
+      Todo calendarEvent = _todoFactory(schedule, title);
       planner.AddEvent(calendarEvent);
       _logger.Log("Run completed");
       return true;

@@ -16,7 +16,12 @@ namespace Calendar.Events
 
     public override string ToString()
     {
-      return "Meeting '" + Title + "' with " + Participants.Aggregate((p1, p2) => p1 + p2) + Environment.NewLine
+      if (Participants.Any())
+        return "Meeting '" + Title + "' with " + Participants.Aggregate((p1, p2) => p1 + p2) + Environment.NewLine
+               + "start date: " + Schedule.StartTime + Environment.NewLine
+               + "end date: " + Schedule.EndTime + Environment.NewLine;
+
+      return "Meeting '" + Title + "' with nobody" + Environment.NewLine
              + "start date: " + Schedule.StartTime + Environment.NewLine
              + "end date: " + Schedule.EndTime + Environment.NewLine;
     }
